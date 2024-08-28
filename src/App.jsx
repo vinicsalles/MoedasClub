@@ -1,35 +1,40 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-function App() {
-  const [count, setCount] = useState(0)
+const CotacaoDolar = () => {
+  const [cotacao, setCotacao] = useState(null);
+  const [valorDolar, setValorDolar] = useState("");
+  const [valorReal, setValorReal] = useState("");
+
+  useEffect(() => {
+    axios
+      .get("https://economia.awesomeapi.com.br/json/last/USD-BRL")
+      .then((response) => {
+        const data = response.data.USDBRL;
+        setCotacao(parseFloat(data.bid).toFixed(2));
+      })
+      .catch((error) => console.error("Erro ao obter cotação", error));
+  }, []);
+
+  const calcularValor = () => {
+    if (cotacao && valorDolar) {
+      setValorReal((valorDolar * cotacao).toFixed(2));
+    }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div>
+      <h1>Cotação do Dólar: {cotacao ? `R$ ${cotacao}` : "Carregando..."}</h1>
+      <input
+        type="number"
+        placeholder="Digite o valor em dólares"
+        value={valorDolar}
+        onChange={(e) => setValorDolar(e.target.value)}
+      />
+      <button onClick={calcularValor}>Calcular em Reais</button>
+      {valorReal && <h2>Valor em Reais: R$ {valorReal}</h2>}
+    </div>
+  );
+};
 
-export default App
+export default CotacaoDolar;
