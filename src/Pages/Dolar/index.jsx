@@ -27,7 +27,7 @@ const CotacaoDolar = () => {
   return (
     <>
       <div>
-        <img src={dolar} alt="" />
+        <img src={dolar} alt="" className="img-dolar" />
         <h1 className="h1">
           Cotação do Dólar Hoje:{" "}
           {cotacao ? `R$ ${cotacao} BRL` : "Carregando..."}

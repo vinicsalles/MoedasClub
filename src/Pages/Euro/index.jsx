@@ -33,6 +33,7 @@ const CotacaoEuro = () => {
           alt="Imagem de uma moeda de Euro"
           width={626}
           height={264}
+          className="img-euro"
         />
         <h1 className="h1">
           Cotação do Euro Hoje:{" "}
